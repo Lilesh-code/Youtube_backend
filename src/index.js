@@ -5,7 +5,7 @@
 
 
 //require('dotenv').config(path:'./env');
-
+import app from "./app.js";
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
 
@@ -28,6 +28,7 @@ dotenv.config({
         console.log("can not connect to database ",err);
         throw err;
     }
+);
 
 
 //connectDB();

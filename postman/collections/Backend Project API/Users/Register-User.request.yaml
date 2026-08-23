@@ -1,0 +1,33 @@
+$kind: http-request
+name: Register User
+method: POST
+url: '{{baseUrl}}/api/v1/users/Register'
+description: Registers a new user. Accepts multipart/form-data because avatar and coverImage are file uploads handled by multer middleware.
+order: 1000
+body:
+  type: formdata
+  content:
+    - key: username
+      type: text
+      value: testuser
+      description: required
+    - key: email
+      type: text
+      value: user@example.com
+      description: required
+    - key: fullname
+      type: text
+      value: Test User
+      description: required
+    - key: password
+      type: text
+      value: yourpassword
+      description: required
+    - key: avatar
+      type: file
+      src: ''
+      description: required - profile image
+    - key: coverImage
+      type: file
+      src: ''
+      description: optional - cover image

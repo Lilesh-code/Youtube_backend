@@ -1,0 +1,13 @@
+$kind: http-request
+name: Login User
+method: POST
+url: '{{baseUrl}}/api/v1/users/login'
+description: Login endpoint (not yet implemented on the server, added as a placeholder).
+order: 2000
+body:
+  type: json
+  content: |-
+    {
+      "email": "user@example.com",
+      "password": "yourpassword"
+    }

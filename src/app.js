@@ -24,5 +24,14 @@ app.use(express.static("public"));
 //server se user k browser mai cookie bhejne ke liye cookie parser ka use karte hai
 app.use(cookieParser());
 
+//import router
+import userRouter from "./routes/user.routes.js"
 
-export{app};
+//routes declaration
+app.use("/api/v1/users",userRouter)
+
+//router.route("/Register").post(registerUser)
+
+
+
+export default app;
