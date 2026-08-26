@@ -1,5 +1,5 @@
 import {v2 as cloudinary} from "cloudinary";
-import fs from "fs";
+import fs, { unlinkSync } from "fs";
 
 
 cloudinary.config({
@@ -16,8 +16,9 @@ const uploadoncloudinary = async (localfilepath)=>{
             resource_type:"auto"
         })
         //file has benn upload successfully
-        console.log("file is uploaded on cloudinary"),
+        //console.log("file is uploaded on cloudinary"),
         response.url;
+        fs.unlinkSync(localpath);
         return response;
     }
     catch(error){

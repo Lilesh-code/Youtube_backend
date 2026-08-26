@@ -39,7 +39,7 @@ const registerUser = asyncHandler(async(req,res)=>{
         throw new APIERROR(409,"Username or email is already exists ")
         
     }
-
+    console.log(req.files);
     
     const avatarLocalpath = req.files?.avatar?.[0]?.path;
     const coverimageLocalpath = req.files?.coverimage?.[0]?.path;
