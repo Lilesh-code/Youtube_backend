@@ -26,6 +26,7 @@ export const verifyJwt = asyncHandler(async (req, _, next) => {
             .select("-password -refreshToken");
 
         if (!user1) {
+            //about fronted
             throw new APIERROR(401, "Invalid access token");
         }
 

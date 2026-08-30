@@ -1,10 +1,13 @@
 
 import { Router } from "express";
+import { registerUser,loggedinUser,logOutUser,refreshAccessToken} from "../controllers/user.controllers.js";
+
 
 import {
     registerUser,
     loggedinUser,
-    logOutUser
+    logOutUser,
+    refreshAccessToken
 } from "../controllers/user.controllers.js";
 
 import { verifyJwt } from "../middlewares/auth.middleware.js";
@@ -39,6 +42,7 @@ router.route("/logout").post(
     verifyJwt,
     logOutUser
 );
+router.route("/refresh-token").post(refreshAccessToken)
 
 
 export default router;
