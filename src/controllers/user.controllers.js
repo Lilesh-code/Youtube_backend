@@ -2,7 +2,7 @@
 import asyncHandler from "../utils/asynchandler.js";
 import { APIERROR } from "../utils/apierror.js";
 import { user } from "../models/user.models.js";
-import { uploadoncloudinary } from "../utils/cloudinary.js";
+import { uploadoncloudinary,deletefromcloudinary } from "../utils/cloudinary.js";
 import { APIRESPONSE } from "../utils/apiresponse.js";
 import jwt  from "jsonwebtoken"
 
@@ -432,12 +432,26 @@ const updateuseravatar = asyncHandler(async (req, res) => {
         throw new APIERROR(400, "Avatar file is missing");
     }
 
+    // Get current user to access old avatar
+    const oldUser = await user.findById(req.user1?._id);
+
+    if (!oldUser) {
+        throw new APIERROR(404, "User not found");
+    }
+
+    // Upload new avatar
     const avatar = await uploadoncloudinary(avatarlocalpath);
 
     if (!avatar?.url) {
         throw new APIERROR(400, "Error while uploading avatar");
     }
 
+    // Delete old avatar from Cloudinary
+    if (oldUser.avatar) {
+        await deletefromcloudinary(oldUser.avatar);
+    }
+
+    // Update user with new avatar
     const user1 = await user.findByIdAndUpdate(
         req.user1?._id,
         {
