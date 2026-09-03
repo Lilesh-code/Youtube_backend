@@ -515,7 +515,81 @@ const updateusercoverimage = asyncHandler(async (req, res) => {
         );
 });
         
+const getUserchannelprofile = asyncHandler(async(req,res)=>{
+         const {username} = req.params
 
+         if(!username?.trim()){
+            throw new APIERROR(400,"username is missing")
+         }
+         const channel = await user.aggragate([
+            {
+                $match:{
+                    username:username?.toLowerCase()
+                }
+
+            },
+            {
+                $lookup:{
+                    from:"subscriptions",
+                    localField:"_id",
+                    foreignField:"channels",
+                    as:"subscribers"
+                }
+            },
+            {
+                $lookup:{
+                    from:"subscriptions",
+                    localField:"_id",
+                    foreignField:"subscriber",
+                    as:"subscribedTo"
+                }
+                
+            },
+            {
+                $addFields:{
+                    subscriberscount:{
+                        $size:"$subscribers"
+                    },
+                    
+                        channelssubscribedTocounts:{
+                              $size:"$subscribedTo"
+                        },
+                        iSsubscribed:{
+                            $cond:{
+                                if:{$in:[req.user?._id,"$subscribers.subscriber"]},
+                                then:true,
+                                else:false
+                            }
+                        }
+
+                        
+                    }
+                },
+                {
+                    $project:{
+                        fullname:1,
+                        username:1,
+                        subscriberscount:1,
+                        channelssubscribedTocounts:1,
+                        iSsubscribed:1,
+                        avatar:1,
+                        coverImage:1,
+                        email:1
+
+
+
+
+                    }
+                }
+            
+         ])
+         if(!channel?.length){
+            throw new APIERROR(404,"Channel does not exist ")
+         }
+         return res
+         .status(200)
+         .json(new APIRESPONSE(200,channel[0],"User channel fetched successfully"))
+})
 export {
     registerUser,
     loggedinUser,
@@ -525,6 +599,7 @@ export {
     getcurrentuser,
     updateAccountdetail,
     updateuseravatar,
-    updateusercoverimage
+    updateusercoverimage,
+    getUserchannelprofile
 
 };
